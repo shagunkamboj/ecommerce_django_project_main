@@ -1,0 +1,32 @@
+{% extends 'blog_header.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+<title> CSS Login Screen Tutorial </title>
+</head>
+<body>
+  <body>
+    <div class="login-page">
+      <div class="form">
+        <div class="login">
+          <div class="login-header">
+          <center>
+            <h3>LOGIN PAGE</h3>
+            <p>Please enter your credentials to login.</p>
+          </div>
+        </div>
+    </center>
+        <form class="login-form" method="post">
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type = 'submit' name = 'submit' style="color: black;margin-top: 20px" value="Submit">
+           </form>
+           
+      </div>
+    </div>
+</body>
+</body>
+</html>
+{% endblock %}

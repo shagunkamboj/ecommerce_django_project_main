@@ -1,0 +1,14 @@
+{% extends 'blog_header.html'%}
+{% block content%}
+<div>
+    <h2> Blogs List</h2>
+    {% for blog in blog %}
+       <h3><b>{{blog.title}}</b></h3>
+       <p>{{blog.description}}</p>
+       <em>{{blog.author}}</em><br>
+       <br>
+       <a href = "{% url 'updating' blog.id %}">Edit</a> || <a href="{% url 'deleting' blog.id%}">Delete</a> ||<a href="{% url 'publish-blog' blog.id %}">Published</a>
+       <hr> 
+    {% endfor %}
+</div>
+{% endblock %}

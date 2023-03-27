@@ -1,0 +1,13 @@
+
+{% extends 'Base.html' %}
+{% block content %}
+
+<form method = "POST" enctype = "multipart/form-data" style="margin:30px;"  >
+    <center><h1>CREATE YOUR PRODUCTS HERE!!!</h1><center><hr>
+    {% csrf_token %}
+    <center>
+    {{form.as_p}}
+    <input type = 'submit' name = 'submit' style="color: black;margin-top: 20px" value="Submit">
+    </center>
+</form>
+{% endblock %}

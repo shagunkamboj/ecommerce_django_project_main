@@ -1,0 +1,16 @@
+{% extends 'Base.html' %}
+{% block content %}
+<div class="container  mt-5">
+    <div class="content">
+      
+            
+            <form class = "form-horizontal" method="POST">
+                {% csrf_token %}
+                <h1 class="form-title">Details of shipping</h1>
+               {{form.as_p}}
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+ </div>
+ <br>
+{% endblock %}

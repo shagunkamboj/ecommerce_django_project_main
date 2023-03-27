@@ -1,0 +1,6 @@
+{% extends 'Base_product.html' %}
+<form method = "POST" style="margin:30px;"enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form.as_div}}
+    <input type = 'submit' name = 'submit' style="color: black;margin-top: 20px" value="Submit">
+</form>

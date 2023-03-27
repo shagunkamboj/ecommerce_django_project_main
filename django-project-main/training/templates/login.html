@@ -1,0 +1,36 @@
+{% extends 'Base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login </title>
+</head>
+<body>
+  <body>
+    <center>
+    <div class="login-page">
+      <div class="form">
+        <div class="login">
+          <div class="login-header">
+          <center>
+            <h1>LOGIN PAGE</h1>
+            <p><b> enter your details to login !!!!</p></b>
+          </div>
+        </div>
+    </center>
+        <form  method="post">
+            {% csrf_token %}
+            {{form.as_p}}
+          <input type = 'submit' name = 'submit' style="color: black;margin-top: 20px" value="Submit">
+            
+        
+        </form>
+        
+      </div>
+    </div>
+</body>
+</body>
+</html>
+
+{% endblock %}
+

@@ -1,0 +1,41 @@
+{% extends 'Base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content=
+		"width=device-width, initial-scale=1" />
+</head>
+
+
+<body>
+    <center><h1>Register Yourself!!!</h1></center>
+	<div id="background">
+		<div class="background-Right"></div>
+		<div class="background-Left"></div>
+       
+	</div>
+
+	<div id="slide">
+		<div class="top">
+			<div class="left">
+				<div class="content">
+					{% if msg %}
+						<p  style="color:green">{{msg}}</p>
+					{% endif %}
+					<form action = "" method="post">
+						{% csrf_token %}
+						{{form.as_p}}
+						<input type = 'submit' name = 'submit' style="color: black;margin-top: 20px" value="Submit">
+					</form>
+					
+                    
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
+{% endblock %}

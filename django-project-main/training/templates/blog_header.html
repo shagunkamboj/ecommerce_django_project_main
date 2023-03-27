@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Bootstrap Example</title>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1">
+    {% comment %} {% load static %} {% endcomment %}
+    <style>
+      .navbar-nav{
+        display: flex;
+        justify-content: space-around;
+        font-size: large;
+      }  
+    </style>
+	<link rel="stylesheet" href=
+"https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<script src=
+"https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+	</script>
+	<script src=
+"https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js">
+	</script>
+</head>
+<body>
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">
+					BLOGS</a>
+			</div>
+			<ul class="nav navbar-nav">
+        <li class="active"><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'bloglogin' %}">LOGIN</a></li>
+        <li><a href="{% url 'registered' %}">REGISTER</a></li>
+        <li><a href="{% url 'create-blog' %}">BLOG CREATE</a></li>
+        <li><a href="{% url 'blog' %}">BLOG LIST</a></li>
+        <li><a href="{% url 'logout' %}">LOGOUT</a></li>
+
+
+        {% comment %} <li><a href="{% url 'product-list' %}">PRODUCTS</a></li> {% endcomment %}
+        <li><a href="{% url 'pasword_update' %}">CHANGE PASSWORD</a></li>
+        
+			</ul>
+		</div>
+	</nav>
+  {% block content %}
+    
+  {% endblock %} 
+</body>
+</html>

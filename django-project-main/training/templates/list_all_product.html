@@ -1,0 +1,108 @@
+{% extends 'Base.html' %}
+{% block content %}
+<style>
+    body {
+  font-size: 0.90rem;
+  background-color:gray;
+}
+</style>
+  <div class="container">
+    <hr />
+  </div>
+  <div class="container">
+    <div class="row">
+    {% comment %} {% for p in products %} {% endcomment %}
+    {% for p in page_obj %}
+      <div class="col-md-4 mb-3">
+        <div class="card h-100">
+          {% comment %} <img src = "{{MEDIA_URL}}{{p.image.url}}"> {% endcomment %}
+          <div class="d-flex justify-content-between position-absolute w-100">
+            <div class="label-new">
+              <span class="text-white bg-success small d-flex align-items-center px-2 py-1">
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <span class="ml-1">New</span>
+              </span>
+            </div>
+            <div class="label-sale">
+              <span class="text-white bg-primary small d-flex align-items-center px-2 py-1">
+                <i class="fa fa-tag" aria-hidden="true"></i>
+                
+              </span>
+            </div>
+          </div>
+          <a href="#">
+            <img src="{{MEDIA_URL}}{{p.image}}" class="card-img-top" alt="Product">
+          </a>
+          
+          <div class="card-body px-2 pb-2 pt-1">
+            <div class="d-flex justify-content-between">
+              <div>
+                <p class="h4 text-primary">{{p.price}}</p>
+              </div>
+              <div>
+                <p class="h4 text-primary"></p>
+              </div>
+              <div>
+                <a href="#" class="text-secondary lead" data-toggle="tooltip" data-placement="left" title="Compare">
+                  <i class="fa fa-line-chart" aria-hidden="true"></i>
+                </a>
+              </div>
+            </div>
+            <p class="text-warning d-flex align-items-center mb-2">
+              <i class="fa fa-star" aria-hidden="true"></i>
+              <i class="fa fa-star" aria-hidden="true"></i>
+              <i class="fa fa-star" aria-hidden="true"></i>
+              <i class="fa fa-star" aria-hidden="true"></i>
+              <i class="fa fa-star" aria-hidden="true"></i>
+            </p>
+            <p class="mb-0">
+              <strong>
+                <a href="#" class="text-secondary">{{p.name}}</a>
+              </strong>
+            </p>
+            
+            <div class="d-flex justify-content-between">
+              <div class="col px-0">
+                <a  href='{%  url 'add_to_cart' p.id %}'  class="btn btn-outline-primary btn-block">
+                  Add_To_Cart
+                  <i class="fa fa-shopping-basket" aria-hidden="true"></i>
+                </a>
+                <a  href='{% url 'wishlist' p.id %}'  class="btn btn-outline-primary btn-block">
+                  Wishlist
+                  
+                  <i class="fa fa-shopping-basket" aria-hidden="true"></i>
+                </a>
+                <a  href='{% url 'product' p.id %}'  class="btn btn-outline-primary btn-block">
+                  similar_products
+                  
+                  <i class="fa fa-shopping-basket" aria-hidden="true"></i>
+                </a>
+              </div>
+              <div class="ml-2">
+                <a href="#" class="btn btn-outline-success" data-toggle="tooltip" data-placement="left" title="Add to Wishlist">
+                  <i class="fa fa-heart" aria-hidden="true"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+     {% endfor %}
+    </div>
+  </div>
+<div class="pagination">
+  <span class="step-links">
+      {% if page_obj.has_previous %}
+          <a href="?page=1">&laquo; <B>FIRST</b></a>
+          <a href="?page={{ page_obj.previous_page_number }}"><b>PREVIOUS</B></a>
+      {% endif %}
+      <span class="current">
+          Page {{ page_obj.number }} Of {{ page_obj.paginator.num_pages }}.
+      </span>
+      {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}"><b>NEXT</b></a>
+          <a href="?page={{ page_obj.paginator.num_pages }}"><B>LAST</B> &raquo;</a>
+      {% endif %}
+  </span>
+</div>
+{% endblock%}

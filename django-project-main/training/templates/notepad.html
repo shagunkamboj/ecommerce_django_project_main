@@ -1,0 +1,323 @@
+{% extends 'Base.html' %}
+{% block content %}
+<div>
+    <h2> products List</h2>
+    {% for p in product %}
+       <h3><b>{{p.name}}</b></h3>
+       <p>{{p.price}}</p>
+       <em>{{p.quantity}}</em><br>
+       <br>
+       <a href="{% url 'add_to_cart' p.id %}">add to cart</a>
+       <hr> 
+    {% endfor %}
+</div>
+{% endblock %}
+
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="style.css" media="all" />
+
+    <title>This is E-Commerce Website</title>
+</head>
+<style>
+  
+a{
+	color: #75b61ac2;
+}
+a:hover{
+	color: #75B61A;
+	text-decoration: none;
+}
+section {
+    padding: 100px 0px;
+}
+img{
+	width: 100%;
+}
+header#header{
+	background: #fff;
+	border-bottom: 2px solid #75B61A;
+}
+.my-menu{
+	float: right !important;
+}
+.my-navbar li a{
+	font-weight: bold;
+}
+.mbl-btn i{
+	color: #75B61A;
+}
+.shopping-bag i {
+    font-size: 30px;
+    color: #75B61A;
+}
+
+
+.head-text {
+    text-align: left;
+}
+
+img.head-img img {
+}
+
+img.head-img {
+    width: 500px;
+}
+button .my-btn{
+	background: #75b61ac2;
+	color: white;
+	font-size: 20px;
+	font-weight: bold;
+	padding: 10px 20px;
+}
+.my-btn:hover{
+	background: #75B61A;
+	color: white;
+	
+}
+section#shiping {
+    padding: 50px;
+    background: #001524;
+    color: white;
+}
+
+.box-icon {
+    display: inline-block;
+}
+
+.box-title {
+    display: inline-grid;
+    margin-left: 20px;
+}
+
+.box-title h3 {
+    font-size: 23px;
+}
+
+.box-icon i {
+    color: #75B61A;
+    font-size: 30px;
+}
+.shipping-box {
+    background: #1C2F3C;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.products {
+    background: #F6F7F2;
+    padding: 10px;
+	transition: all .5s;
+}
+
+.product-desc {
+    text-align: center;
+}
+.product-rating{
+	width: 100px;
+	margin: auto;
+	margin-bottom: 5px;
+}
+.products:hover {
+    box-shadow: 0px 0px 5px 1px #ddd;
+}
+
+.product-img {
+    margin-bottom: 20px;
+}
+.product-img img{
+	cursor: pointer;
+}
+.basket{
+    color: #75B61A;
+}
+footer#footer {
+    background: #001524;
+    color: #6B7780;
+    padding: 60px;
+}
+.app-store {
+    display: inline-block;
+    width: 150px;
+    margin-right: 10px;
+}
+
+.app-img {
+    float: left;
+}
+.footer-title{
+    margin-bottom: 20px;
+}
+.footer-title h5 {
+    color: white;
+}
+.footer-logo{
+	width: 150px;
+	margin: auto;
+}
+.footer-desc ul{
+	list-style: none;
+	padding-left: 0px;
+}
+.footer-desc ul li{
+	padding: 6px 0px;
+}
+.footer-desc ul li a{
+	
+}
+</style>
+<body>
+    {% for message in messages %}
+    <div class="alert {{message.tags}} alert-dismissible" role="alert">
+      {{message}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
+    <header id="header">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg">
+                <a class="navbar-brand" href="#"><img src="images/logo.jpg" alt="" /></a>
+                <button class="mbl-btn navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav mr-auto"></ul>
+                    <ul class="my-navbar navbar-nav">
+                        <div class="input-group rounded">
+                            <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                            <span class="input-group-text border-0" id="search-addon">
+                              <i class="fas fa-search"></i>
+                            </span>
+                          </div>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url 'home' %}">HOME<span class="sr-only">(current)</span></a>
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">LOGIN</a>
+                        </li>
+                    
+                         <li class="nav-item">
+                            <a class="nav-link" href="{% url 'register' %}">REGISTER</a>
+                        </li> 
+                        
+                        
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'address' %}">shipping</a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <div class="basket">
+                              <a  class="nav-link"  href"{% url 'cart_list'%}"><i class="fas fa-shopping-basket">CART</i></a>
+                            </div>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" href="{% url 'profile'%}">MY_PROFILE</a>
+                        </li>
+                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dropdown link</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="{% url 'create' %}">create product</a>
+                                <a class="dropdown-item" href="{% url 'product-list' %}">list all product</a>
+                                
+                                
+                            </div>
+                        </li>
+                    </ul>
+                    
+					<div class="shopping-bag"><a href="#"><i class="fas fa-shopping-bag"></i></a></div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    {%  block content %}
+    {%  endblock %}
+    <footer id="footer">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-4">
+                  <div class="footer-box">
+                      <div class="footer-title">
+                          <h5>Download Our Mobile App</h5>
+                      </div>
+                      <div class="footer-desc">
+                          <p>Molestiae reiciendis neque arcu! Tempor reprehenderit accusantium quibusdam iste accusan.</p>
+                      </div>
+                      <div class="app-img">
+                          <div class="app-store"><a href="#"><img src="images/play-store.png" alt="" /></a></div>
+                          <div class="app-store"><a href="#"><img src="images/app-store.png" alt="" /></a></div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="footer-box">
+                      <div class="footer-title">
+                          <div class="footer-logo"><img src="images/logo02.png" alt="" /></div>
+                      </div>
+                      <div class="footer-desc">
+                          <p style="text-align: center;">Molestiae reiciendis neque arcu! Tempor reprehenderit accusantium quibusdam iste accusan.</p>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-2">
+                  <div class="footer-box">
+                      <div class="footer-title">
+                          <h5>Quick Links</h5>
+                      </div>
+                      <div class="footer-desc">
+                          <ul>
+                              <li><a href="{% url 'know'%}">Know More About Us</a></li>
+                              <li><a href="#">Visit Store</a></li>
+                              <li><a href="#">Let's Connect</a></li>
+                              <li><a href="#">Locate Store</a></li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-2">
+                  <div class="footer-box">
+                      <div class="footer-title">
+                          <h5>Sites Links</h5>
+                      </div>
+                      <div class="footer-desc">
+                          <ul>
+                              <li><a href="{% url 'privacypolicy'%}">Privacy Policy</a></li>
+                              <li><a href="#">Shipping Details</a></li>
+                              <li><a href="#">Offer Coupons</a></li>
+                              <li><a href="#">Terms & Conditions</a></li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </footer>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/e05090259d.js" crossorigin="anonymous"></script>
+</body>
+
+</html>
