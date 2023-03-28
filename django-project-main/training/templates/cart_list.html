@@ -15,6 +15,7 @@
   
   <div class="container">
     <div class="row">
+      <img src="{{ MEDIA_URL }}{{wishlist.image.url}}">
     {% for p in Cart %}
       <div class="col-md-4 mb-3">
         <div class="card h-100">
@@ -32,9 +33,9 @@
               </span>
             </div>
           </div>
-          <a href="#">
+          {% comment %} <a href="#">
             <img src="https://media.self.com/photos/63a48870d50ce65b23271f7d/master/pass/best-shoes-for-plantar-fasciitis.png" class="card-img-top" alt="Product">
-          </a>
+          </a> {% endcomment %}
           <div class="card-body px-2 pb-2 pt-1">
             <div class="d-flex justify-content-between">
               <div>

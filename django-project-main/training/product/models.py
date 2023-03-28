@@ -6,7 +6,7 @@ class Product(models.Model):
     name =models.CharField(max_length=50)
     price=models.IntegerField()
     quantity = models.TextField()
-    image = models.ImageField(upload_to='images/',default = "")
+    image = models.ImageField(upload_to='images/',null=True)
     category = models.CharField(max_length=50,null=True)
 class Cart(models.Model):
   product1 = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -40,4 +40,9 @@ class UserProfile(models.Model):
     address = models.CharField(max_length=200)
     phone = models.CharField(max_length=20)
 
-
+class Order_item(models.Model):
+    price_item = models.CharField(max_length=200)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    
+    

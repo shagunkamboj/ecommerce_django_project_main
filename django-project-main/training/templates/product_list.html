@@ -10,7 +10,7 @@
 <style>
     body {
         font-family: sans-serif;
-        background-color:gray;
+        background-color:white;
     }
     {% comment %} header {
         height: 15vh;
@@ -225,15 +225,11 @@
                     <div class="product-box">
                         <div class="img-wrapper">
                             <div class="front">
-                                <a href="#"><img src="{{ MEDIA_URL }}{{i.image}}"
+                                <a href="#"><img src="{{ MEDIA_URL }}{{i.image.url}}"
                                         class="img-fluid blur-up lazyload bg-img" alt=""></a>
-                                        <img src="https://tse2.mm.bing.net/th?id=OIP.8w5Bo_ZbDPW4Wv9B6Xb23gHaHa&pid=Api&P=0">
+                                        {% comment %} <img src="https://tse2.mm.bing.net/th?id=OIP.8w5Bo_ZbDPW4Wv9B6Xb23gHaHa&pid=Api&P=0"> {% endcomment %}
                             </div>
-                            <div class="front">
-                                <a href="#"><img src="{{ MEDIA_URL }}{{i.image}}"
-                                        class="img-fluid blur-up lazyload bg-img" alt=""></a>
-                                        <img src="https://post.healthline.com/wp-content/uploads/2020/08/fruits-and-vegetables-thumb.jpg">
-                            </div>
+                            
                             </div>
                             <div class="cart-info cart-wrap">
                                 <button data-toggle="modal" data-target="#addtocart" title="Add to cart"><i
