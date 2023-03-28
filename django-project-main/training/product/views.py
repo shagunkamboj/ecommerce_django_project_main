@@ -2,12 +2,30 @@ from django.http import HttpResponse
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from .forms import ProductForm,RegisterForms,login_product,AddressForm,UserProfile
-from .models import Product,Cart,AddressModel,Order,UserProfile,Wishlist
+from .models import Product,Cart,AddressModel,Order,UserProfile,Wishlist,Order_item
 from product.cart_helper import add_cart,remove_from_cart_helper,register_user,login
 from django.contrib.auth import authenticate,login as auth,logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.serializers import ModelSerializer
+
+
+class Product_Serializer(ModelSerializer):
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+
+@api_view()
+def product_view(request):
+    p = Product.objects.all()
+    serializer = Product_Serializer(p, many=True)
+    return Response(serializer.data)
+    
+
 
 # Create your views here.
 def work(request):
@@ -172,6 +190,7 @@ def login(request):
             print("yes")
             auth(request,user)
             print(request.user)
+            messages.success(request,'You were successfully login')
             return redirect('home')
         else:
             print("please enter valid details for login ")
@@ -327,6 +346,42 @@ def search(request):
     for cat in cats:
         prodtemp = Product.objects.filter(category=cat)
         prod=[item for item in prodtemp if searchMatch(query, item)]
+        n = len(prod)
+        nSlides = n // 4 + int((n / 4) - (n // 4))
+        if len(prod)!= 0:
+            allProds.append([prod, range(1, nSlides), nSlides])
+    params = {'allProds': allProds, "msg":""}
+    if len(allProds)==0 or len(query)<4:
+        params={'msg':"Please make sure to enter relevant search query"}
+    return render(request, 'search.html', params)
+
+# def product_detail(request,id):
+#     product = Product.objects.get(id=id)
+# 	related_products = Product.objects.filter(category=product.category).exclude(id=id)[:4]
+#     return render(request, 'product_detail.html',{'data':product,'related':related_products})
+def product_detail(request,id):
+    product = Product.objects.get(id = id)
+    related_product = Product.objects.filter(category=product.category).exclude(id = id )[:4]
+    return render(request, 'product_detail.html',{'data':product,'related':related_products})
+
+def order_item(request, order_id):
+    cart =request.session['cart']
+    for p_id , p in cart.items():
+        total_sum = int(p['price']) * p['quantity']
+        Order_item.objects.create(order_id=order_id,product_id=p['id'],item_price=total_sum)
+        print("yes Done ")
+def searchMatch(query, item):
+    if query in item.name or query in item.category:
+        return True
+    else:
+        return False
+def search(request):
+    query= request.GET.get('search')
+    allProds = []
+    catprods = Product.objects.values('category', 'id')
+    cats = {item['category'] for item in catprods}
+    for cat in cats:
+        prodtemp = Product.objects.filter(category=cat)
         n = len(prod)
         nSlides = n // 4 + int((n / 4) - (n // 4))
         if len(prod)!= 0:
