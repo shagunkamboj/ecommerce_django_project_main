@@ -20,9 +20,10 @@ from django.conf import settings
 from django.conf.urls.static import static 
 # from django.confimport setting
 from blog.views import update_blog,delete_blog,login_user,home_blog,logout_user,registered_user,publish_blog,update_user,publish_blog,CreateFormview, list_all_blogs, Blogview
-from product.views import work,create_product,list_all_products,delete_product,add_to_cart,remove_cart,cart_list,login,register_user,home_product,knowaboutus,privacypolicy,logout,del_cart,checkout,add_address,order_create,increment_item,decrement_item,continueshopping,profile,change_password,add_wishlist,get_wishlist,del_to_wishlist,similar_product,search
+from product.views import work,create_product,list_all_products,delete_product,add_to_cart,remove_cart,cart_list,login,register_user,home_product,knowaboutus,privacypolicy,logout,del_cart,checkout,add_address,order_create,increment_item,decrement_item,continueshopping,profile,change_password,add_wishlist,get_wishlist,del_to_wishlist,similar_product,search,product_detail,product_view
 
 urlpatterns = [
+    path('product/view', product_view),
     path('',home_product,name='home'),
     path('work',work),
     path('productcreate',create_product,name='create'),
@@ -77,6 +78,8 @@ urlpatterns = [
     path('continue/',  continueshopping, name='continue'),
     path('profile/', profile, name='profile'),
     path('change-pass/',change_password ,name='change'),
+    path('product/<int:id>',product_detail,name='product_detail'),
+   
    
 
  
