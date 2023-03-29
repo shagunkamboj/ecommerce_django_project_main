@@ -20,12 +20,22 @@ from django.conf import settings
 from django.conf.urls.static import static 
 # from django.confimport setting
 from blog.views import update_blog,delete_blog,login_user,home_blog,logout_user,registered_user,publish_blog,update_user,publish_blog,CreateFormview, list_all_blogs, Blogview
-from product.views import work,create_product,list_all_products,delete_product,add_to_cart,remove_cart,cart_list,login,register_user,home_product,knowaboutus,privacypolicy,logout,del_cart,checkout,add_address,order_create,increment_item,decrement_item,continueshopping,profile,change_password,add_wishlist,get_wishlist,del_to_wishlist,similar_product,search,product_detail,product_view
+from product.views import work,product_create,address_view,address_create,partial_update,delete,create_product,list_all_products,delete_product,add_to_cart,remove_cart,cart_list,login,register_user,home_product,knowaboutus,privacypolicy,logout,del_cart,checkout,add_address,order_create,increment_item,decrement_item,continueshopping,profile,change_password,add_wishlist,get_wishlist,del_to_wishlist,similar_product,search,product_detail,product_view,add_product,update_product
 
 urlpatterns = [
     path('product/view', product_view),
+    path('product/create',product_create),
+    path('update/<int:pk>',update_product),
+    path('delete/<int:pk>',delete),
+    path('pupdate/<int:pk>',partial_update),
+    ########## address view #####
+    path('address/view', address_view),
+     path('address/create',address_create),
+    
+    #path('aproduct/<int:pk>/', product_view),
     path('',home_product,name='home'),
     path('work',work),
+    path('shop/add',add_product,name='add'),
     path('productcreate',create_product,name='create'),
     path('product/list',list_all_products,name='product-list'),
     path('product/delete',delete_product,name = 'delete'),

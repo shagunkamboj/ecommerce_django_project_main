@@ -1,0 +1,9 @@
+<form method = "POST" >
+    {% csrf_token %}
+    {{form.as_p}}
+    {% for i in tag %}
+        <input type="radio" name="tags" value="{{ i.id }}"> 
+        <label>{{i.tag_name}}</label>
+    {% endfor %}
+    <input type = 'submit' name = 'submit'  value="Submit">
+</form>

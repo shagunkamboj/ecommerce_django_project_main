@@ -11,21 +11,76 @@ from django.core.paginator import Paginator
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
+from rest_framework import status
 
 
 class Product_Serializer(ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+        
+class Address_Serializer(ModelSerializer):
+    class Meta:
+        model = AddressModel
+        fields = "__all__"
 
 
 @api_view()
 def product_view(request):
     p = Product.objects.all()
-    serializer = Product_Serializer(p, many=True)
+    serializer = Product_Serializer(p, many=True)# models firlds name product
     return Response(serializer.data)
-    
+#with particular id 
+# def product_view(request,pk):
+#     p = Product.objects.get(id = pk )
+#     serializer = Product_Serializer(p)
+#     return Response(serializer.data)
+@api_view(http_method_names=('post',))
+def product_create(request,*args,**kwargs):
+    p = Product_Serializer(data = request.data)
+    if p.is_valid():
+        p.save()
+        return Response({"data":p.data})
+    else:
+        return Response({'error':p.errors},status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(http_method_names=('put',))
+def update_product(request,pk):
+    p = Product.objects.get(id = pk)
+    Serializer = Product_Serializer(p,data = request.data)
+    Serializer.is_valid(raise_exception=True)
+    Serializer.save()
+    return Response({"message":Serializer.data})
+    
+    
+@api_view(http_method_names=('delete',))
+def delete(request,pk):
+    p = Product.objects.get(id = pk)
+    p.delete()
+    return Response({"message":"the object has been deleted"})
+    
+@api_view(http_method_names=('patch',))
+def partial_update(request,pk):
+    p = Product.objects.get(id = pk)
+    serializer = Product_Serializer(p,data = request.data)
+    serializer.is_valid(raise_exception= True)
+    serializer.save()
+    return Response({"message":serializer.data})
+#################################Address VIEW#############################
+@api_view()
+def address_view(request):
+    p = AddressModel.objects.all()
+    serializer = Address_Serializer(p, many=True)# models firlds name product
+    return Response(serializer.data)
+
+@api_view(http_method_names=('post',))
+def address_create(request,*args,**kwargs):
+    p = Address_Serializer(data = request.data)
+    if p.is_valid():
+        p.save()
+        return Response({"data":p.data})
+    else:
+        return Response({'error':p.errors},status=status.HTTP_400_BAD_REQUEST)
 
 # Create your views here.
 def work(request):
@@ -35,6 +90,17 @@ def home_product(request):
     return render(request,'index_product.html')
 def knowaboutus(request):
     return render(request,'knowaboutus.html')
+def add_product(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST,request.FILES)
+        if form.is_valid():
+            product = form.save(commit = False)
+            tag = request.POST.getlist('tag')
+            product.save()
+            product.tag.set(tag)
+    else:
+        form = ProductForm()
+    return render(request,'add.html', {'form': form})
 # @login_required
 # def wishlist(request):
 #     if request.method == 'POST':

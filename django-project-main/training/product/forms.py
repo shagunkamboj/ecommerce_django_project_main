@@ -2,6 +2,7 @@ from django import forms
 from .models import * 
 from django.contrib.auth.models import User
 from django.forms import ModelForm, TextInput, EmailInput, PasswordInput, ImageField
+
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
