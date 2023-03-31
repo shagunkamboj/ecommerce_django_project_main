@@ -20,9 +20,11 @@ from django.conf import settings
 from django.conf.urls.static import static 
 # from django.confimport setting
 from blog.views import update_blog,delete_blog,login_user,home_blog,logout_user,registered_user,publish_blog,update_user,publish_blog,CreateFormview, list_all_blogs, Blogview
-from product.views import work,product_create,address_view,address_create,partial_update,delete,create_product,list_all_products,delete_product,add_to_cart,remove_cart,cart_list,login,register_user,home_product,knowaboutus,privacypolicy,logout,del_cart,checkout,add_address,order_create,increment_item,decrement_item,continueshopping,profile,change_password,add_wishlist,get_wishlist,del_to_wishlist,similar_product,search,product_detail,product_view,add_product,update_product
+from product.views import work,address_list,logout_users,product_create,login_user,address_view,delete_address,update_address,address_create,partial_update_address,partial_update,delete,create_product,list_all_products,delete_product,add_to_cart,remove_cart,cart_list,login,register_user,home_product,knowaboutus,privacypolicy,logout,del_cart,checkout,add_address,order_create,increment_item,decrement_item,continueshopping,profile,change_password,add_wishlist,get_wishlist,del_to_wishlist,similar_product,search,product_detail,product_view,add_product,update_product
 
 urlpatterns = [
+    path('create/blog',CreateFormview.as_view(),name='create-blog'),
+    path('del/blog',Blogview.as_view(),name='blog'),
     path('product/view', product_view),
     path('product/create',product_create),
     path('update/<int:pk>',update_product),
@@ -30,14 +32,21 @@ urlpatterns = [
     path('pupdate/<int:pk>',partial_update),
     ########## address view #####
     path('address/view', address_view),
-     path('address/create',address_create),
+    path('address/create',address_create),
+    path('addupdate/<int:pk>',update_address),
+    path('adddelete/<int:pk>',delete_address),
+    path('partialupdate/<int:pk>',partial_update_address),
+    path('address/list',address_list),
     
+    path('login/users/', login_user),
+    path('logout/users/',logout_users,name='logoutusertoken'),
+    #"794dcbf112f6ee6d19f099b7fd0887b4853347b5"
     #path('aproduct/<int:pk>/', product_view),
     path('',home_product,name='home'),
     path('work',work),
     path('shop/add',add_product,name='add'),
     path('productcreate',create_product,name='create'),
-    path('product/list',list_all_products,name='product-list'),
+    #path('product/list',list_all_products.as_view(),name='productlist'),
     path('product/delete',delete_product,name = 'delete'),
     path('add_to_cart/<int:id>/add',add_to_cart,name = "add_to_cart"),
     #path('cart/details', list_cart, name='List_cart'),
@@ -57,7 +66,7 @@ urlpatterns = [
     path('create/blog',CreateFormview.as_view(),name='create-blog'),
     path('del/blog',Blogview.as_view(),name='blog'),
     path('logout/',logout,name = "logout"),
-    path('product/list',list_all_products,name='product-list'),
+    path('product/list',list_all_products.as_view(),name='product-list'),
     path('product/delete',delete_product),
     path('add_to_cart/<int:id>',add_to_cart,name='add_cart'),
     # path('cart/<int:id>',del_cart),
@@ -71,7 +80,8 @@ urlpatterns = [
     # path('form/',form_view),
     # path('demo/create',create_blog,name='creating'),
     path('checkout',checkout, name='checkout'),
-    path('demo/list',list_all_blogs,name='listing'),
+    # path('demo/list',list_all_blogs,name='listing'),
+    path('listallblog/',list_all_blogs.as_view(),name = "l"),
     path('demo/<int:id>/update',update_blog,name='updating'),
     path('demo/<int:id>/delete',delete_blog,name='deleting'),
     path('login/',login_user,name='bloglogin'),  

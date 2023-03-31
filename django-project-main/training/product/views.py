@@ -8,10 +8,20 @@ from django.contrib.auth import authenticate,login as auth,logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,permission_classes
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
 from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework import authentication, permissions
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
+   
+
+
+
 
 
 class Product_Serializer(ModelSerializer):
@@ -23,8 +33,33 @@ class Address_Serializer(ModelSerializer):
     class Meta:
         model = AddressModel
         fields = "__all__"
-
-
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = User 
+        fields = ['username','password']
+        
+        
+        
+@api_view(http_method_names=('post',))
+def login_user(request):
+    username=request.data['username']
+    password=request.data['password']
+    user=authenticate(username=username,password=password)
+    auth(request,user)
+    user= User.objects.get(username=username)
+    token=Token.objects.create(user=user)
+    serializer = UserSerializer(user)
+    return Response({'token':token.key},status=status.HTTP_200_OK)
+@api_view()
+@permission_classes([IsAuthenticated])
+def logout_users(request):
+    try:
+        token=Token.objects.get(user_id=request.user.id)
+        token.delete()
+        logout(request)
+    except:
+        return Response({'message':"not loged"})
+    return Response({'user':"successfully login"})          
 @api_view()
 def product_view(request):
     p = Product.objects.all()
@@ -36,15 +71,17 @@ def product_view(request):
 #     serializer = Product_Serializer(p)
 #     return Response(serializer.data)
 @api_view(http_method_names=('post',))
+
 def product_create(request,*args,**kwargs):
     p = Product_Serializer(data = request.data)
     if p.is_valid():
         p.save()
         return Response({"data":p.data})
     else:
-        return Response({'error':p.errors},status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error':p.errors})
 
 @api_view(http_method_names=('put',))
+#@permissions_classes([IsAuthenticated])
 def update_product(request,pk):
     p = Product.objects.get(id = pk)
     Serializer = Product_Serializer(p,data = request.data)
@@ -66,7 +103,7 @@ def partial_update(request,pk):
     serializer.is_valid(raise_exception= True)
     serializer.save()
     return Response({"message":serializer.data})
-#################################Address VIEW#############################
+#################################Address VIEW #############################
 @api_view()
 def address_view(request):
     p = AddressModel.objects.all()
@@ -74,13 +111,51 @@ def address_view(request):
     return Response(serializer.data)
 
 @api_view(http_method_names=('post',))
+@permission_classes([IsAuthenticated])
 def address_create(request,*args,**kwargs):
+    request.data['user_id'] = request.user.id
     p = Address_Serializer(data = request.data)
     if p.is_valid():
         p.save()
         return Response({"data":p.data})
     else:
         return Response({'error':p.errors},status=status.HTTP_400_BAD_REQUEST)
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def address_list(request):
+    addresses = AddressModel.objects.all()
+    return Response({'Address':AddressModelSerializer(addresses,many=True).data},status=status.HTTP_200_OK)
+@api_view(http_method_names=('put',))
+@permission_classes([IsAuthenticated])
+def update_address(request, pk):
+    address = AddressModel.objects.get(id=pk)
+    serializer = Address_Serializer(address, data = request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response({'Address':serializer.data}, status=status.HTTP_200_OK)
+
+
+
+@api_view(http_method_names=('delete',))
+@permission_classes([IsAuthenticated])
+def delete_address(request,pk):
+    p = AddressModel.objects.get(id = pk)
+    p.delete()
+    return Response({"message":"the object has been deleted"}, status=status.HTTP_202_ACCEPTED)
+
+@api_view(http_method_names=('patch',))
+@permission_classes([IsAuthenticated])
+
+def partial_update_address(request,pk):
+    address = AddressModel.objects.get(id=pk)
+    serializer = Address_Serializer(address, data = request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response({'Address':serializer.data}, status=status.HTTP_200_OK)
+
+
+
 
 # Create your views here.
 def work(request):
@@ -140,13 +215,19 @@ def create_product(request):
             form_Product.save()
     return render(request,'create.html', {'form': form_Product})
     
-def list_all_products(request):
-    product = Product.objects.all()
-    paginator = Paginator(product,5)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    #return render(request,'list_all_product.html', {'products': product})
-    return render(request,'list_all_product.html', {'page_obj': page_obj})    
+# def list_all_products(request):
+#     product = Product.objects.all()
+#     paginator = Paginator(product,5)
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
+#     #return render(request,'list_all_product.html', {'products': product})
+#     return render(request,'list_all_product.html', {'page_obj': page_obj}) 
+class list_all_products(ListView):
+    model = Product
+    template_name = "product_get.html"
+    paginate_by = 5
+    context_object_name= "products"
+      
 
 def delete_product(request,**kwargs):
     if id:=kwargs.get('id'):
@@ -154,7 +235,10 @@ def delete_product(request,**kwargs):
         product.delete()
     product = product.objects.all()
     return render(request,'list_all.html', {'product': product})
-
+# class remove_cart(DetailView):
+#     model = Product
+#     template_name = "add_to_cart.html"
+    
 
 # def add_to_cart(request,**kwargs):
 #     helper_cart=add_cart(request,**kwargs)
@@ -168,9 +252,9 @@ def remove_cart(request,**kwargs):
     print(cart_delete)
     messages.success(request,'Product remove from Cart!!')
     return render(request, 'add_to_cart.html') and redirect('/cart/list')
-#     cart=delete_cart(request,**kwargs)
-#     print(cart)
-#     return redirect('/cart/list')
+    cart=delete_cart(request,**kwargs)
+    print(cart)
+    return redirect('/cart/list')
 
 
 # def cart_list(request):
@@ -441,18 +525,18 @@ def searchMatch(query, item):
         return True
     else:
         return False
-def search(request):
-    query= request.GET.get('search')
-    allProds = []
-    catprods = Product.objects.values('category', 'id')
-    cats = {item['category'] for item in catprods}
-    for cat in cats:
-        prodtemp = Product.objects.filter(category=cat)
-        n = len(prod)
-        nSlides = n // 4 + int((n / 4) - (n // 4))
-        if len(prod)!= 0:
-            allProds.append([prod, range(1, nSlides), nSlides])
-    params = {'allProds': allProds, "msg":""}
-    if len(allProds)==0 or len(query)<4:
-        params={'msg':"Please make sure to enter relevant search query"}
-    return render(request, 'search.html', params)
+# def search(request):
+#     query= request.GET.get('search')
+#     allProds = []
+#     catprods = Product.objects.values('category', 'id')
+#     cats = {item['category'] for item in catprods}
+#     for cat in cats:
+#         prodtemp = Product.objects.filter(category=cat)
+#         n = len(prod)
+#         nSlides = n // 4 + int((n / 4) - (n // 4))
+#         if len(prod)!= 0:
+#             allProds.append([prod, range(1, nSlides), nSlides])
+#     params = {'allProds': allProds, "msg":""}
+#     if len(allProds)==0 or len(query)<4:
+#         params={'msg':"Please make sure to enter relevant search query"}
+#     return render(request, 'search.html', params)

@@ -1,6 +1,6 @@
 {% extends 'blog_header.html'%}
 {% block content%}
-<div>
+{% comment %} <div>
     <h2> Blogs List</h2>
     {% for blog in blog %}
        <h3><b>{{blog.title}}</b></h3>
@@ -9,6 +9,11 @@
        <br>
        <a href = "{% url 'updating' blog.id %}">Edit</a> || <a href="{% url 'deleting' blog.id%}">Delete</a> ||<a href="{% url 'publish-blog' blog.id %}">Published</a>
        <hr> 
+    {% endfor %} {% endcomment %}
+    {% for i in blog_list %}
+    {{i.title}}
+    {{i.description}}
+    {{i.author}}
     {% endfor %}
 </div>
 {% endblock %}

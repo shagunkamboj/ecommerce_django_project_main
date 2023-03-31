@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth import authenticate,login,logout
 from django.views import View
-    
+from django.views.generic.list import ListView
   
 
 class CreateFormview(View):
@@ -58,12 +58,13 @@ def registered_user(request):
 
 
 
-def list_all_blogs(request):
-    blog  = Blog.objects.all()
-    return render(request,'list_all.html',{'blog':blog})
+# def list_all_blogs(request):
+#     blog  = Blog.objects.all()
+#     return render(request,'list_all.html',{'blog':blog})
     
-
-# def get_blogs(request):
+class list_all_blogs(ListView):
+    model = Blog
+#def get_blogs(request):
 #     if request.method  == 'GET':
 #             blogs  = Blog.objects.all()
 #     return render(request, 'blog_list.html', {'blogs':blogs})
