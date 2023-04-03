@@ -18,9 +18,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-   
-
-
+from django.views.generic.edit import FormView
+from rest_framework.generics import ListAPIView,CreateAPIView
 
 
 
@@ -38,7 +37,20 @@ class UserSerializer(ModelSerializer):
         model = User 
         fields = ['username','password']
         
-        
+class productlist(ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = Product_Serializer  
+    
+class productscreate(CreateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = Product_Serializer  
+    def create(self, request,):
+        response = super().create(request)
+        return Response({
+            
+            'message': 'API IS CREATED',
+            
+        })   
         
 @api_view(http_method_names=('post',))
 def login_user(request):
@@ -207,14 +219,17 @@ def register_user(request):
     return render(request,'register.html', {'form': form})
 
     
-def create_product(request): 
-    form_Product = ProductForm()
-    if request.method == 'POST':
-        form_Product = ProductForm(request.POST, request.FILES)
-        if form_Product.is_valid():
-            form_Product.save()
-    return render(request,'create.html', {'form': form_Product})
-    
+# def create_product(request): 
+#     form_Product = ProductForm()
+#     if request.method == 'POST':
+#         form_Product = ProductForm(request.POST, request.FILES)
+#         if form_Product.is_valid():
+#             form_Product.save()
+#     return render(request,'create.html', {'form': form_Product})
+class create_product(FormView):
+    template_name = "create.html"
+    form_class = ProductForm
+    success_url = '/productcreate'
 # def list_all_products(request):
 #     product = Product.objects.all()
 #     paginator = Paginator(product,5)

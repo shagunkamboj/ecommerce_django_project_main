@@ -9,7 +9,25 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth import authenticate,login,logout
 from django.views import View
 from django.views.generic.list import ListView
-  
+from rest_framework.decorators import api_view,permission_classes
+from rest_framework.response import Response
+from rest_framework.serializers import ModelSerializer
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework import authentication, permissions
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import ListAPIView,CreateAPIView,RetrieveAPIView,ListCreateAPIView
+from django_filters.rest_framework import DjangoFilterBackend
+class Blog_Serializer(ModelSerializer):
+    class Meta:
+        model = Blog
+        fields = '__all__'
+class Blogs_Serializer(ModelSerializer):
+    class Meta:
+        model = Blog
+        fields = ['title']
+
 
 class CreateFormview(View):
      form=BlogForm()
@@ -140,13 +158,47 @@ def update_user(request):
 #     blogs = Blog.objects.filter(is_published=True)
 #     return render(request, 'bloglist.html', {'blogs':blogs})
 
-
+@api_view()
+def blogs_view(request):
+    p = Blog.objects.all()
+    serializer = Blog_Serializer(p, many=True)# models firlds name product
+    return Response(serializer.data)
+@api_view(http_method_names=('post',))
+def blogs_create(request,*args,**kwargs):
+    p = Blog_Serializer(data = request.data)
+    if p.is_valid():
+        p.save()
+        return Response({"data":p.data})
+    else:
+        return Response({'error':p.errors})
 
     
     
 
 
+class blogslist(ListAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = Blog_Serializer  
+    
+class blogscreate(CreateAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = Blog_Serializer  
+    def create(self, request,):
+        response = super().create(request)
+        return Response({
+            
+            'message': 'BLOGS API IS CREATED',
+            
+        })   
 
+class blogsr(RetrieveAPIView):
+    queryset = Blog.objects.filter(is_published = True)
+    serializer_class = Blogs_Serializer  
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['title']
+class blogslistcreate(ListCreateAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = Blog_Serializer  
 
 
 # from django import forms

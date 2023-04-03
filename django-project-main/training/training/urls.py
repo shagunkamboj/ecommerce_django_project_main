@@ -18,11 +18,13 @@ from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.conf.urls.static import static 
+from product import views
 # from django.confimport setting
-from blog.views import update_blog,delete_blog,login_user,home_blog,logout_user,registered_user,publish_blog,update_user,publish_blog,CreateFormview, list_all_blogs, Blogview
-from product.views import work,address_list,logout_users,product_create,login_user,address_view,delete_address,update_address,address_create,partial_update_address,partial_update,delete,create_product,list_all_products,delete_product,add_to_cart,remove_cart,cart_list,login,register_user,home_product,knowaboutus,privacypolicy,logout,del_cart,checkout,add_address,order_create,increment_item,decrement_item,continueshopping,profile,change_password,add_wishlist,get_wishlist,del_to_wishlist,similar_product,search,product_detail,product_view,add_product,update_product
+from blog.views import update_blog,blogs_view,blogslistcreate,blogslist,blogsr,blogscreate,blogs_create,delete_blog,login_user,home_blog,logout_user,registered_user,publish_blog,update_user,publish_blog,CreateFormview, list_all_blogs, Blogview
+from product.views import work,productscreate,address_list,logout_users,product_create,login_user,address_view,delete_address,update_address,address_create,partial_update_address,partial_update,delete,create_product,list_all_products,delete_product,add_to_cart,remove_cart,cart_list,login,register_user,home_product,knowaboutus,privacypolicy,logout,del_cart,checkout,add_address,order_create,increment_item,decrement_item,continueshopping,profile,change_password,add_wishlist,get_wishlist,del_to_wishlist,similar_product,search,product_detail,product_view,add_product,update_product,productlist
 
 urlpatterns = [
+     path('',views.home_product,name='home'),
     path('create/blog',CreateFormview.as_view(),name='create-blog'),
     path('del/blog',Blogview.as_view(),name='blog'),
     path('product/view', product_view),
@@ -45,7 +47,7 @@ urlpatterns = [
     path('',home_product,name='home'),
     path('work',work),
     path('shop/add',add_product,name='add'),
-    path('productcreate',create_product,name='create'),
+    path('productcreate',create_product.as_view(),name='create'),
     #path('product/list',list_all_products.as_view(),name='productlist'),
     path('product/delete',delete_product,name = 'delete'),
     path('add_to_cart/<int:id>/add',add_to_cart,name = "add_to_cart"),
@@ -100,7 +102,15 @@ urlpatterns = [
     path('change-pass/',change_password ,name='change'),
     path('product/<int:id>',product_detail,name='product_detail'),
    
-   
+    path('productlist/',productlist.as_view(),name = "p"),
+    
+    path('productscreate/',productscreate.as_view(),name = "p"),
+    path('blogss/',blogs_view,name='blog'),
+    path('blogsscreate/',blogs_create,name='blog'),
+    path('blogslist/',blogslist.as_view(),name = "b1"),
+    path('blogscreate/',blogscreate.as_view(),name = "b2"),
+    path('blogsr/<int:pk>',blogsr.as_view(),name = "b3"),
+    path('blogslistcreate/',blogslistcreate.as_view(),name = "b4"),
 
  
     
